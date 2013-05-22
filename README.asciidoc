@@ -1,0 +1,86 @@
+++++
+<img src="http://www.smorg.co.uk/images/check_file_exists_glob.png"
+alt="Nagios GUI Screenshot" style="float:none" />
+++++
+
+Check Nagios Config
+-------------------
+
+Check for existence or non-existence of a file or files - using glob patterns.
+
+*INSTALL*
+
+Example:
+
+----
+wget https://raw.github.com/mclarkson/check_file_exists_glob/master/check_file_exists_glob
+chmod +x check_file_exists_glob
+mv check_file_exists_glob /usr/lib64/nagios/plugins/
+----
+
+*EXAMPLE OUTPUT*
+
+----
+OK: File 'asdfg*' is absent, good.
+
+OK: File 'asdf*' is present, good. | "asdf*"=3
+
+WARNING:  File 'asdfg*' found in '/home/clarkm93/bob/'. | "asdfg*"=2
+
+CRITICAL:  File 'asdf*' found in '/home/clarkm93/bob/'. | "asdf*"=3
+
+----
+
+*MANUAL PAGE*
+
+----
+$ ./check_file_exists_glob -h
+
+check_file_exists_glob - Alert if a FILE does not exist.
+
+Usage: check_file_exists_glob [options] -d DIR FILE
+
+ FILE    :  The file to search for. Can glob using '*' etc, but
+            place file names with glob patterns within quotes.
+            Mandatory. The FILE must always be specified.
+ -d DIR  :  Base directory to search in.
+            Mandatory option - the DIR must always be specified.
+ -i      :  Invert FILE, so alert if FILE does exist.
+ -I      :  Alert if DIR does not exist.
+ -p      :  Add performance data output for graphing.
+ -w NUM  :  Warning alert if >=NUM files are found and invert
+            files '-i' is on. (Default is: 1)
+ -c NUM  :  Critical alert if >=NUM files are found and invert
+            files '-i' is on. (Default is: 1)
+ -h      :  Display this help text.
+
+Example:
+
+  Check that /tmp/dir/file exists.
+
+    ./check_file_exists_glob -d /tmp/dir file
+
+  Check that /tmp/dir/file does NOT exist.
+
+    ./check_file_exists_glob -d /tmp/dir -i file
+
+  Again check that /tmp/dir/file does NOT exist but this time alert
+  if the directory it could be found in, /tmp/dir, is missing.
+
+    ./check_file_exists_glob -d /tmp -i -I file
+
+  Check for files matching the glob 'fi*' and alert if found in
+  /tmp/dir. Alert if /tmp/dir does not exist. Provide performance
+  data for graphing, showing the number of files matching the
+  glob pattern.
+
+    ./check_file_exists_glob -d /tmp/dir -i -I -p "fi*"
+
+  Same as previous but only alert if thresholds are exceeded. In
+  this case issue a warning alert when there are 20 or more files
+  found, critical for 30 or more.
+
+    ./check_file_exists_glob -d /tmp/dir -i -I -p -w 20 -c 30 "fi*"
+
+----
+
