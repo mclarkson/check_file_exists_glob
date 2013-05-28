@@ -5,12 +5,12 @@
 #    General Public License (GPL), as published at: 
 #    http://www.gnu.org/licenses/gpl.html .
 #
-# File:     check_nagios_config
-# Date:     26 Apr 2013
+# File:     check_file_exists_glob
+# Date:     06 May 2013
 # Version:  0.10
 # Modified:
 #
-# Purpose:  Check the nagios.cfg file using 'nagios -v'.
+# Purpose:  Check for existence (or not) of a file.
 #
 # Notes:
 #
