@@ -145,7 +145,7 @@ usage()
     echo "  Again check that /tmp/dir/file does NOT exist but this time alert"
     echo "  if the directory it could be found in, /tmp/dir, is missing."
     echo
-    echo "    ./`basename $ME` -d /tmp -i -I file"
+    echo "    ./`basename $ME` -d /tmp/dir -i -I file"
     echo
     echo "  Check for files matching the glob 'fi*' and alert if found in"
     echo "  /tmp/dir. Alert if /tmp/dir does not exist. Provide performance"
