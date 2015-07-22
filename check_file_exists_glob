@@ -175,6 +175,7 @@ do_check()
         ALERTDIR=1
     [[ $INVERTFILE -eq 0 ]] && {
         found=`find $DIR -maxdepth 1 -name "$FILE" 2>/dev/null | wc -l`
+        [[ "$FILE" == '*' ]] && let found=found-1
         NFILES=$found
         [[ $found -eq 0 ]] && {
             ALERTFILE=1
