@@ -8,7 +8,8 @@
 # File:     check_file_exists_glob
 # Date:     06 May 2013
 # Version:  0.10
-# Modified:
+# Modified: 23 Jul 2015 by Mark Clarkson <mark.clarkson@smorg.co.uk>
+#             Allow '*' as FILE.
 #
 # Purpose:  Check for existence (or not) of a file.
 #
@@ -63,7 +64,7 @@ main()
     [[ $INVERTFILE -eq 1 ]] && msg="File '$FILE' is absent, good."
     if [[ $ALERTFILE -eq 1 ]]; then
         retval=$CRIT
-        txt="OK: "
+        txt="CRITICAL: "
         [[ $NFILES -ge $WARNLVL ]] && txt="WARNING: "
         [[ $NFILES -ge $CRITLVL ]] && txt="CRITICAL: "
         msg="File does not exist, '$FILE'."
@@ -174,8 +175,7 @@ do_check()
     [[ $INVERTFILE -eq 1 && $INVERTDIR -eq 1 && ! -d $DIR ]] && \
         ALERTDIR=1
     [[ $INVERTFILE -eq 0 ]] && {
-        found=`find $DIR -maxdepth 1 -name "$FILE" 2>/dev/null | wc -l`
-        [[ "$FILE" == '*' ]] && let found=found-1
+        found=`find $DIR -mindepth 1 -maxdepth 1 -name "$FILE" 2>/dev/null | wc -l`
         NFILES=$found
         [[ $found -eq 0 ]] && {
             ALERTFILE=1
@@ -183,7 +183,7 @@ do_check()
         }
     }
     [[ $INVERTFILE -eq 1 ]] && {
-        found=`find $DIR -maxdepth 1 -name "$FILE" 2>/dev/null | wc -l`
+        found=`find $DIR -mindepth 1 -maxdepth 1 -name "$FILE" 2>/dev/null | wc -l`
         NFILES=$found
         [[ $found -ge 1 ]] && {
             ALERTFILE=1
