@@ -65,7 +65,7 @@ main()
     if [[ $ALERTFILE -eq 1 ]]; then
         retval=$CRIT
         txt="CRITICAL: "
-        [[ $NFILES -ge $WARNLVL ]] && { txt="WARNING: "; retval=$CRIT; }
+        [[ $NFILES -ge $WARNLVL ]] && { txt="WARNING: "; retval=$WARN; }
         [[ $NFILES -ge $CRITLVL ]] && txt="CRITICAL: "
         [[ $NFILES -lt $WARNLVL ]] && { txt="OK: "; retval=$OK; }
         msg="File does not exist, '$FILE'."
