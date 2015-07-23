@@ -67,6 +67,7 @@ main()
         txt="CRITICAL: "
         [[ $NFILES -ge $WARNLVL ]] && txt="WARNING: "
         [[ $NFILES -ge $CRITLVL ]] && txt="CRITICAL: "
+        [[ $NFILES -lt $WARNLVL ]] && { txt="OK: "; retval=$OK; }
         msg="File does not exist, '$FILE'."
         [[ $INVERTFILE -eq 1 ]] && msg="File '$FILE' found in '$DIR'."
         [[ $ALERTDIR -eq 1 ]] && msg+=" Directory does not exist, '$DIR'."
