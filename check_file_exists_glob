@@ -11,6 +11,9 @@
 # Modified: 23 Jul 2015 by Mark Clarkson <mark.clarkson@smorg.co.uk>
 #             Allow '*' as FILE.
 #
+# Modified: 12 Nov 2021 by Morten Vinding <mvi@dmi.dk>
+#             Add -o "output" to output file content
+#
 # Purpose:  Check for existence (or not) of a file.
 #
 # Notes:
@@ -60,8 +63,13 @@ main()
     do_check
 
     txt="OK:"
-    [[ $INVERTFILE -eq 0 ]] && msg="File '$FILE' is present, good."
-    [[ $INVERTFILE -eq 1 ]] && msg="File '$FILE' is absent, good."
+    if [[ $INVERTFILE -eq 0 ]]; then
+       msg="File '$FILE' is present, good."
+       [[ $CONTENTOUT -eq 1 ]] && msg="$(cat $DIR/$FILE)"
+    else
+       msg="File '$FILE' is absent, good."
+    fi
+
     if [[ $ALERTFILE -eq 1 ]]; then
         retval=$CRIT
         txt="CRITICAL: "
@@ -69,8 +77,10 @@ main()
         [[ $NFILES -ge $CRITLVL ]] && { txt="CRITICAL: "; retval=$CRIT; }
         [[ $NFILES -lt $WARNLVL && $INVERTFILE -eq 1 ]] && { txt="OK: "; retval=$OK; }
         msg="File does not exist, '$FILE'."
-        [[ $INVERTFILE -eq 1 ]] && msg="File '$FILE' found in '$DIR'."
-        [[ $ALERTDIR -eq 1 ]] && msg+=" Directory does not exist, '$DIR'."
+        if [[ $INVERTFILE -eq 1 ]]; then
+           msg="File '$FILE' found in '$DIR'."
+           [[ $CONTENTOUT -eq 1 ]] && msg="$(cat $DIR/$FILE)"
+        fi
     elif [[ $ALERTDIR -eq 1 ]]; then
         retval=$CRIT
         txt="CRITICAL: "
@@ -132,6 +142,7 @@ usage()
     echo "            files '-i' is on. (Default is: 1)"
     echo " -c NUM  :  Critical alert if >=NUM files are found and invert"
     echo "            files '-i' is on. (Default is: 1)"
+    echo " -o      :  Output the content of the file if found"
     echo " -h      :  Display this help text."
     echo
     echo "Example:"
@@ -216,6 +227,8 @@ parse_options()
             ;;
             -p) WITHPERF=1
             ;;
+            -o) CONTENTOUT=1
+            ;;
             -h) usage
                 exit 0
             ;;
@@ -240,4 +253,3 @@ parse_options()
 main "$@"
 
 exit 0
-
