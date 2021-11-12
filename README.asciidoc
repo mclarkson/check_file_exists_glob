@@ -52,6 +52,7 @@ Usage: check_file_exists_glob [options] -d DIR FILE
             files '-i' is on. (Default is: 1)
  -c NUM  :  Critical alert if >=NUM files are found and invert
             files '-i' is on. (Default is: 1)
+ -o      :  Output the content of the file if found
  -h      :  Display this help text.
 
 Example:
